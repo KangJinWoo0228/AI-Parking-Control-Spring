@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gailab.parking.dao.InoutRepository">
+	<resultMap type="com.gailab.parking.vo.InoutHistory" id="inoutHistoryMap" >
+		<id property="id" column="inout_id"/>
+		<result property="vehicleId" column="vehicle_id"/>
+		<result property="inoutType" column="inout_type"/>
+		<result property="inoutTime" column="inout_time"/>
+		<result property="inoutPicture" column="inout_picture"/>
+		<result property="vehicleNumber" column="vehicle_number"/>
+		<result property="vehicleType" column="vehicle_type"/>
+		<result property="aptAddressDong" column="apt_address_dong"/>
+		<result property="aptAddressHo" column="apt_address_ho"/>
+		<result property="vehicleOwnerName" column="vehicle_owner_name"/>
+		<result property="vehicleOwnerContact" column="vehicle_owner_contact"/>
+	</resultMap>
+	<select id="getAddressInoutHistory" parameterType="Long"
+		resultType="Map">
+		SELECT *
+		FROM tbl_vehicle v
+		LEFT JOIN tbl_inout i
+		ON v.vehicle_id = i.vehicle_id
+		WHERE v.apt_address_id = #{addressId} AND i.inout_intime IS NOT null
+	</select>
+	<select id="getAllInoutHistories" parameterType="String" resultMap="inoutHistoryMap">
+		SELECT 
+			i.inout_id, 
+			v.vehicle_id, 
+			v.vehicle_number, 
+			i.inout_time, 
+			v.vehicle_type,
+			a.apt_address_dong, 
+			a.apt_address_ho, 
+			i.inout_type, 
+			v.vehicle_owner_name,
+			v.vehicle_owner_contact, 
+			i.inout_picture
+		FROM tbl_inout i
+		JOIN tbl_vehicle v ON v.vehicle_id = i.vehicle_id
+		JOIN tbl_apt_address a ON v.apt_address_id = a.apt_address_id
+		WHERE a.apt_id = #{aptId};
+	</select>	
+</mapper>

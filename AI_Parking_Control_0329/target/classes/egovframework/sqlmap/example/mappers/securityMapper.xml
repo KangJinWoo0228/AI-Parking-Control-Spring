@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gailab.parking.dao.SecurityRepository">
+	<resultMap type="com.gailab.parking.vo.Security" id="securityMap">
+		<id property="id" column="security_id" />
+		<result property="securityLoginId" column="security_login_id" />
+		<result property="securityName" column="security_name" />
+		<result property="securityContact" column="security_contact" />
+		<result property="securityArea" column="security_area" />
+		<result property="securityStartTime" column="security_starttime" />
+		<result property="securityEndTime" column="security_endtime" />
+	</resultMap>
+	
+    <select id="getAllSecurities" resultMap="securityMap">
+		SELECT security_id, security_login_id, security_name, 
+			   security_contact, security_area, 
+		 	   security_starttime, security_endtime
+		FROM tbl_security
+		WHERE apt_id=#{aptId}
+	</select>
+</mapper>

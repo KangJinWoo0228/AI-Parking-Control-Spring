@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gailab.parking.dao.ParkingRuleRepository">
+	<resultMap type="com.gailab.parking.vo.ParkingRule" id="parkingRuleMap">
+	    <id property="parkingRuleId" column="parking_rule_id"/>
+	    <result property="aptId" column="apt_id"/>
+	    <result property="parkingRuleBaseTime" column="parking_rule_basetime"/>
+	    <result property="parkingRuleApplyTime" column="parking_rule_applytime"/>
+	    <result property="parkingRuleFee" column="parking_rule_fee"/>
+	    <result property="parkingRuleStartTime" column="parking_rule_starttime"/>
+	    <result property="parkingRuleEndTime" column="parking_rule_endtime"/>
+	    <result property="parkingRuleApplyStart" column="parking_rule_applystart"/>
+	    <result property="parkingRuleApplyEnd" column="parking_rule_applyend"/>
+	</resultMap>
+	<resultMap type="com.gailab.parking.vo.ParkingRuleVacation" id="parkingRuleVacationMap">
+		<id property="parkingRuleVacationId" column="parking_rule_vacation_id" />
+		<result property="parkingRuleId" column="parking_rule_id"/>
+		<result property="parkingRuleDate" column="parking_rule_date"/>
+	</resultMap>
+	
+	<select id="getParkingRule" resultMap="parkingRuleMap">
+		SELECT *
+		FROM tbl_parking_rule
+		WHERE apt_id=#{aptId}
+	</select>
+	
+	<insert id="addVacation" parameterType="Map">
+		INSERT INTO tbl_parking_rule_vacation (parking_rule_id, parking_rule_date)
+		SELECT pr.parking_rule_id, #{parking_rule_date}
+		FROM tbl_parking_rule pr
+		WHERE pr.apt_id = #{aptId};
+	</insert>
+	
+	<select id="getParkingRuleVacation" parameterType="Long" resultMap="parkingRuleVacationMap">
+		SELECT pv.*
+		FROM tbl_parking_rule_vacation pv
+		JOIN tbl_parking_rule pr ON pv.parking_rule_id = pr.parking_rule_id
+		WHERE pr.apt_id = 2
+		AND YEAR(pv.parking_rule_date) = YEAR(CURDATE())
+		ORDER BY pv.parking_rule_date;
+	</select>
+	
+	<delete id="removeParkingRuleVacation">
+		DELETE FROM tbl_parking_rule_vacation
+		WHERE parking_rule_date = #{parkingRuleDate} AND parking_rule_id = #{parkingRuldId} 
+	</delete>
+	
+    <update id="updateParkingRule" parameterType="map">
+        UPDATE tbl_parking_rule
+        SET
+            parking_rule_id = #{parkingRule.parkingRuleId},
+            apt_id = #{parkingRule.aptId},
+            parking_rule_basetime = #{parkingRule.parkingRuleBaseTime},
+            parking_rule_applytime = #{parkingRule.parkingRuleApplyTime},
+            parking_rule_fee = #{parkingRule.parkingRuleFee},
+            parking_rule_starttime = #{parkingRule.parkingRuleStartTime},
+            parking_rule_endtime = #{parkingRule.parkingRuleEndTime},
+            parking_rule_applystart = #{parkingRule.parkingRuleApplyStart},
+            parking_rule_applyend = #{parkingRule.parkingRuleApplyEnd}
+        WHERE
+            parking_rule_id = #{parkingRuleId}
+    </update>
+</mapper>

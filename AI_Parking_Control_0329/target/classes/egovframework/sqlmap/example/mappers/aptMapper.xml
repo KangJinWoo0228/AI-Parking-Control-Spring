@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gailab.parking.dao.AptRepository">
+	<resultMap type="com.gailab.parking.vo.Apt" id="aptMap">
+		<id property="id" column="apt_id" />
+		<result property="aptName" column="apt_name" />
+		<result property="address" column="apt_address" />
+		<result property="postalCode" column="apt_postalcode" />
+		<result property="parkingArea" column="apt_parking_area" />
+	</resultMap>
+	
+	<resultMap id="aptAddressMap" type="com.gailab.parking.vo.AptAddress">
+		<id property="addressId" column="apt_address_id" />
+		<result property="dong" column="apt_address_dong" />
+		<result property="ho" column="apt_address_ho" />
+		<result property="master" column="apt_address_master" />
+	</resultMap>
+	
+	<resultMap id="requestMap" type="com.gailab.parking.vo.Request">
+		<id property="addRequestId" column="add_request_id"/>
+		<result property="aptAddressId" column="apt_address_id"/>
+		<result property="userId" column="user_id"/>
+		<result property="delFlag" column="del_flag"/>
+		<result property="userLoginEmail" column="user_login_email"/>
+		<result property="userMaster" column="user_master"/>
+		<result property="userName" column="user_name"/>
+		<result property="userContact" column="user_contact"/>
+	</resultMap>
+
+	<select id="getApts" resultMap="aptMap">
+		SELECT * FROM tbl_apt WHERE
+		apt_id != 1
+	</select>
+	
+	<select id="getAptAddress" resultMap="aptAddressMap">
+		SELECT apt_address_id, apt_address_dong, apt_address_ho
+		FROM tbl_apt_address
+		where apt_id=#{aptId}		
+	</select>
+	
+	<select id="getRequest" resultMap="requestMap">
+		SELECT 	ar.add_request_id, 
+				ar.apt_address_id, 
+				ar.user_id, 
+				ar.del_flag, 
+				u.user_login_email, 
+				u.user_master, 
+			    u.user_name, 
+			    u.user_contact
+		FROM tbl_address_request ar
+		JOIN tbl_user u ON ar.user_id = u.user_id
+		WHERE ar.apt_address_id=#{addressId} AND u.user_master=1
+	</select>
+	
+	<select id="getAptDong" resultType="String">
+		SELECT DISTINCT
+		apt_address_dong FROM tbl_apt_address WHERE apt_id=#{aptId}
+	</select>
+
+	<select id="getAptHo" resultType="String">
+		SELECT apt_address_ho FROM
+		tbl_apt_address WHERE apt_address_dong=#{dong}
+	</select>
+
+	<insert id="addAddressRequest" parameterType="Map">
+		INSERT INTO
+		tbl_address_request (apt_address_id, user_id) VALUES((SELECT
+		apt_address_id FROM tbl_apt_address WHERE apt_address_dong = #{dong}
+		AND apt_address_ho = #{ho}),
+		#{normalUserId});
+	</insert>
+
+	<update id="updateAddressMaster" parameterType="Map">
+		UPDATE
+		tbl_apt_address SET apt_address_master = #{normalUserId} WHERE
+		apt_address_id = #{addressId}
+	</update>
+
+	<update id="deleteInfo" parameterType="Map">
+		UPDATE tbl_address_request
+		SET del_flag = 1 WHERE apt_address_id = #{addressId} AND user_id =
+		#{normalUserId}
+	</update>
+
+	<insert id="setSpecificRate" parameterType="Integer">
+		INSERT INTO
+		tbl_specific_rate (apt_address_id, specific_rate_remaining,
+		specific_rate_deducted)
+		VALUES(#{addressId}, (SELECT
+		parking_rule_basetime FROM tbl_parking_rule WHERE apt_id = (SELECT
+		apt_id FROM tbl_apt_address WHERE apt_address_id = #{addressId})), 0)
+	</insert>
+
+	<select id="getUserAddresses" resultType="String">
+		SELECT CONCAT(apt_name,
+		' ', apt_address_dong, '동 ', apt_address_ho, '호')
+		FROM tbl_apt apt
+		LEFT
+		JOIN tbl_apt_address address
+		ON apt.apt_id = address.apt_id
+		LEFT JOIN
+		tbl_user u
+		ON u.apt_address_id = address.apt_address_id
+		WHERE u.user_id
+		= #{userId}
+	</select>
+</mapper>

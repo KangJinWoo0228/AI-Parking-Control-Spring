@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gailab.parking.dao.BlacklistRepository">
+    <resultMap type="com.gailab.parking.vo.Blacklist" id="blacklistMap">
+        <id property="id" column="blacklist_id"/>
+        <result property="vehicleOwnerName" column="vehicle_owner_name"/>
+        <result property="vehicleOwnerContact" column="vehicle_owner_contact"/>
+        <result property="aptAddressDong" column="apt_address_dong"/>
+        <result property="aptAddressHo" column="apt_address_ho"/>
+        <result property="vehicleNumber" column="vehicle_number"/>
+        <result property="blacklistReportTime" column="blacklist_reporttime"/>
+        <result property="blacklistDescription" column="blacklist_description"/>
+        <result property="blacklistCount" column="blacklist_count"/>
+        <result property="inoutPicture" column="inout_picture" />
+    </resultMap>
+
+    <insert id="reportBlacklist" parameterType="Map">
+        INSERT INTO tbl_blacklist (vehicle_id, user_id, blacklist_description)
+        VALUES (#{vehicleId}, #{userId}, #{reason})
+    </insert>
+
+    <select id="getAllBlacklist" resultMap="blacklistMap">
+		SELECT 
+			b.vehicle_id, 
+			b.user_id, 
+			b.blacklist_reporttime, 
+			b.blacklist_description, 
+			v.vehicle_number,
+			ad.apt_address_dong, 
+			ad.apt_address_ho, 
+			COUNT(v.vehicle_id) AS blacklist_count, 
+			b.blacklist_description, 
+			v.vehicle_owner_name, 
+			v.vehicle_owner_Contact,
+			i.inout_picture
+		FROM tbl_blacklist b
+		LEFT JOIN tbl_vehicle v ON b.vehicle_id = v.vehicle_id
+		LEFT JOIN tbl_apt_address ad ON v.apt_address_id = ad.apt_address_id
+		LEFT JOIN tbl_inout i ON v.vehicle_id = i.vehicle_id
+		WHERE ad.apt_id = #{aptId}
+		GROUP BY v.vehicle_number
+		HAVING blacklist_count > 0
+		ORDER BY b.blacklist_reporttime DESC;
+    </select>
+</mapper>

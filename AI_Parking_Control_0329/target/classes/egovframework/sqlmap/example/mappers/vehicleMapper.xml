@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gailab.parking.dao.VehicleRepository">
+	<resultMap type="com.gailab.parking.vo.Vehicle" id="vehicleMap">
+		<id property="id" column="vehicle_id"/>
+		<result property="vehicleNumber" column="vehicle_number"/>
+		<result property="vehicleType" column="vehicle_type"/>
+		<result property="addressId" column="apt_address_id"/>
+		<result property="ownerName" column="vehicle_owner_name"/>
+		<result property="ownerContact" column="vehicle_owner_contact"/>
+		<result property="addressDong" column="apt_address_dong"/>
+		<result property="addressHo" column="apt_address_ho"/>
+		<result property="monthlyTicket" column="vehicle_monthly_ticket"/>
+		<result property="description" column="vehicle_description"/>
+	</resultMap>
+	<select id="existVehicleNumber" resultType="Integer">
+		SELECT vehicle_id
+		FROM
+		tbl_vehicle WHERE vehicle_number = #{vehicleNumber}
+	</select>
+	<insert id="insertVehicleInfo" parameterType="Map">
+		INSERT INTO
+		tbl_vehicle (vehicle_number, vehicle_type,
+		apt_address_id,
+		vehicle_owner_name, vehicle_owner_contact,
+		vehicle_monthly_ticket
+		) VALUES
+		(#{vehicleNumber}, #{vehicleType}, (SELECT
+		apt_address_id FROM
+		tbl_apt_address WHERE apt_id = #{aptId} AND
+		apt_address_dong =
+		#{dong} AND apt_address_ho = #{ho}), #{ownerName},
+		#{ownerContact}, 0)
+	</insert>
+	
+	<insert id="insertMyAddressVehicleInfo" parameterType="Map">
+		INSERT INTO
+		tbl_vehicle (vehicle_number, vehicle_type,
+		apt_address_id,
+		vehicle_owner_name, vehicle_owner_contact,
+		vehicle_monthly_ticket
+		) VALUES
+		(#{vehicleNumber}, #{vehicleType}, #{addressId}, #{ownerName}, #{ownerContact}, 0)
+	</insert>
+	
+	<select id="getAllVehicles" parameterType="Long" resultMap="vehicleMap">
+		SELECT 
+		    v.vehicle_id,
+		    v.vehicle_number,
+		    v.vehicle_type,
+		    v.vehicle_owner_name,
+		    v.vehicle_owner_contact,
+		    a.apt_address_dong,
+		    a.apt_address_ho
+		FROM 
+		    tbl_vehicle v
+		LEFT JOIN 
+		    tbl_apt_address a ON v.apt_address_id = a.apt_address_id
+		WHERE 
+		    a.apt_id = #{aptId};
+	</select>
+</mapper>
