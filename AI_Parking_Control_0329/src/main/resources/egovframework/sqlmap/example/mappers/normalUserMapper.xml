@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gailab.parking.dao.NormalUserRepository">
+	<resultMap type="com.gailab.parking.vo.NormalUser"
+		id="normalUserMap">
+		<id property="id" column="user_id" />
+		<result property="loginEmail" column="user_login_email" />
+		<result property="loginPassword" column="user_login_password" />
+		<result property="addressId" column="apt_address_id" />
+		<result property="addressMaster" column="user_master"
+			jdbcType="BIT" javaType="boolean"
+			typeHandler="org.apache.ibatis.type.BooleanTypeHandler" />
+		<result property="approval" column="user_approval"
+			jdbcType="BIT" javaType="boolean"
+			typeHandler="org.apache.ibatis.type.BooleanTypeHandler" />
+		<result property="createTime" column="user_createtime" />
+		<result property="name" column="user_name" />
+		<result property="contact" column="user_contact" />
+	</resultMap>
+
+	<select id="getUser" resultMap="normalUserMap">
+		SELECT * FROM tbl_user WHERE
+		user_login_email=#{email}
+	</select>
+
+	<insert id="register"
+		parameterType="com.gailab.parking.vo.NormalUser">
+		INSERT INTO tbl_user (user_login_email,
+		user_login_password) VALUES (#{loginEmail}, #{loginPassword})
+	</insert>
+
+	<update id="updateAddress" parameterType="Map">
+		UPDATE tbl_user SET
+		apt_address_id = (SELECT apt_address_id FROM tbl_apt_address WHERE
+		apt_address_dong =
+		#{dong} AND apt_address_ho = #{ho}) WHERE user_id =
+		#{normalUserId}
+	</update>
+
+	<update id="addUserNameAndContact"
+		parameterType="com.gailab.parking.vo.NormalUser">
+		UPDATE tbl_user SET user_name = #{name}, user_contact =
+		#{contact} WHERE user_id=#{id}
+	</update>
+
+	<update id="approveMasterUser">
+		UPDATE tbl_user SET user_master = 1, user_approval =
+		1 WHERE user_id = #{userId}
+	</update>
+</mapper>

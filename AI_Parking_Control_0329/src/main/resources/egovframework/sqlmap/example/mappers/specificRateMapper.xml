@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gailab.parking.dao.SpecificRateRepository">
+	<resultMap type="com.gailab.parking.vo.SpecificRate" id="specificRateMap">
+		<id property="id" column="specific_rate_id" />
+		<result property="addressId" column="apt_address_id" />
+		<result property="dong" column="apt_address_dong"/>
+		<result property="ho" column="apt_address_ho"/>
+		<result property="specificRateRemaining" column="specific_rate_remaining" />
+		<result property="specificRateDeducted" column="specific_rate_deducted" />
+		<result property="parkingRuleFee" column="parking_rule_fee"/>
+	</resultMap>
+
+	<select id="getSpecificRate" resultMap="specificRateMap">
+		SELECT * FROM
+		tbl_specific_rate WHERE apt_address_id = #{addressId}
+	</select>
+	
+	<select id="getAllSpecificRate" parameterType="Integer" resultMap="specificRateMap">
+		SELECT 
+		   a.apt_id, a.apt_address_id, a.apt_address_dong, a.apt_address_ho,
+	      s.specific_rate_id, 
+	      MIN(s.specific_rate_remaining) AS specific_rate_remaining, 
+	      MAX(s.specific_rate_deducted) AS specific_rate_deducted,
+			pr.parking_rule_fee 	       
+		FROM tbl_apt_address a
+		LEFT JOIN tbl_specific_rate s ON s.apt_address_id = a.apt_address_id
+		LEFT JOIN tbl_parking_rule pr ON a.apt_id = pr.apt_id
+		WHERE a.apt_id = 2
+		GROUP BY a.apt_address_dong
+		ORDER BY a.apt_address_dong ASC;
+	</select>
+	
+	
+</mapper>

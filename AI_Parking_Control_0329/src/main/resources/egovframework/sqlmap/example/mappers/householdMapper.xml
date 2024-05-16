@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gailab.parking.dao.HouseholdRepository">
+
+    <update id="updateHouseholdMember" parameterType="com.gailab.parking.vo.NormalUser">
+        UPDATE tbl_user
+        SET
+            user_login_email = #{loginEmail},
+            user_master = #{addressMaster},
+            user_name = #{name},
+            user_contact = #{contact}
+        WHERE user_id = #{id}
+    </update>
+
+    <update id="updateHouseholdVehicle" parameterType="com.gailab.parking.vo.Vehicle">
+        UPDATE tbl_vehicle
+        SET
+            vehicle_number = #{vehicleNumber},
+            vehicle_owner_name = #{ownerName},
+            vehicle_owner_contact = #{ownerContact}
+        WHERE vehicle_id = #{id}
+    </update>
+    
+    <update id="approveRequest">
+    UPDATE tbl_address_request
+    SET del_flag = 1
+    WHERE user_id = #{userId}
+	</update>
+	
+	<update id="rejectRequest">
+	    UPDATE tbl_address_request
+	    SET del_flag = 2
+	    WHERE user_id = #{userId}
+	</update>
+
+</mapper>
