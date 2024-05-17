@@ -1,5 +1,6 @@
 package com.gailab.parking.config.handler;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
@@ -19,28 +20,25 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class APIManagerLoginSuccessHandler implements AuthenticationSuccessHandler {
 
-	@Override
-	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-			Authentication authentication) throws java.io.IOException, ServletException {
-		log.info("----------");
-		log.info(authentication);
-		log.info("----------");
-		
-		ManagerDTO managerDTO = (ManagerDTO) authentication.getPrincipal();
-		Map<String, Object> claims = managerDTO.getClaims();
-		
-		String accessManagerToken = JWTUtil.generateManagerToken(claims, 10);
-		String refreshManagerToken = JWTUtil.generateManagerToken(claims, 60*24);
-		
-		claims.put("accessManagerToken", accessManagerToken);
-		claims.put("refreshManagerToken", refreshManagerToken);
-		
-		Gson gson = new Gson();
-		String jsonStr = gson.toJson(claims);
-		
-		response.setContentType("application/json; charset=UTF-8");
-		PrintWriter printWriter = response.getWriter();
-		printWriter.println(jsonStr);
-		printWriter.close();
-	}
+    @Override
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        log.info("Manager login success....");
+        // Manager 계정 로그인 성공 시 JWT 토큰 생성 및 반환
+        ManagerDTO managerDTO = (ManagerDTO) authentication.getPrincipal();
+        Map<String, Object> claims = managerDTO.getClaims();
+
+        String accessUserToken = JWTUtil.generateToken(claims, 10);
+        String refreshUserToken = JWTUtil.generateToken(claims, 60 * 24);
+
+        claims.put("accessUserToken", accessUserToken);
+        claims.put("refreshUserToken", refreshUserToken);
+
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(claims);
+
+        response.setContentType("application/json; charset=UTF-8");
+        PrintWriter printWriter = response.getWriter();
+        printWriter.println(jsonStr);
+        printWriter.close();
+    }
 }

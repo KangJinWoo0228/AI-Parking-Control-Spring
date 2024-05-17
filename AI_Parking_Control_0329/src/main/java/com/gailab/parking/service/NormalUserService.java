@@ -43,7 +43,7 @@ public class NormalUserService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		log.info("-----loadUserByUsername-----");
-		
+		System.out.println(username);
 		NormalUser normalUser = normalUserRepository.getUser(username);
 		System.out.println(normalUser);
 		

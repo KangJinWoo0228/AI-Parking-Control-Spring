@@ -31,12 +31,12 @@ public class APIRefreshController {
 	        return Map.of("accessUserToken", accessUserToken, "refreshToken", refreshUserToken);
 	    }
 
-	    Map<String, Object> claims = JWTUtil.validateToken(refreshUserToken, "userKey");
+	    Map<String, Object> claims = JWTUtil.validateToken(refreshUserToken);
 
 	    log.info("refresh... claims: " + claims);
 
-	    String newAccessToken = JWTUtil.generateUserToken(claims, 60 * 24);
-	    String newRefreshToken = checkTime((Integer)claims.get("exp")) == true ? JWTUtil.generateUserToken(claims, 60 * 24) : refreshUserToken;
+	    String newAccessToken = JWTUtil.generateToken(claims, 60 * 24);
+	    String newRefreshToken = checkTime((Integer)claims.get("exp")) == true ? JWTUtil.generateToken(claims, 60 * 24) : refreshUserToken;
 
 	    return Map.of("accessUserToken", newAccessToken, "refreshUserToken", newRefreshToken);
 	} 
@@ -56,12 +56,12 @@ public class APIRefreshController {
 	        return Map.of("accessManagerToken", accessManagerToken, "refreshToken", refreshManagerToken);
 	    }
 
-	    Map<String, Object> claims = JWTUtil.validateToken(refreshManagerToken, "managerKey");
+	    Map<String, Object> claims = JWTUtil.validateToken(refreshManagerToken);
 
 	    log.info("refresh... claims: " + claims);
 
-	    String newAccessToken = JWTUtil.generateManagerToken(claims, 60 * 24);
-	    String newRefreshToken = checkTime((Integer)claims.get("exp")) == true ? JWTUtil.generateUserToken(claims, 60 * 24) : refreshManagerToken;
+	    String newAccessToken = JWTUtil.generateToken(claims, 60 * 24);
+	    String newRefreshToken = checkTime((Integer)claims.get("exp")) == true ? JWTUtil.generateToken(claims, 60 * 24) : refreshManagerToken;
 
 	    return Map.of("accessManagerToken", newAccessToken, "refreshManagerToken", newRefreshToken);
 	}
@@ -76,7 +76,7 @@ public class APIRefreshController {
 	
 	private boolean checkExpiredToken(String token, String keyType) {
 	    try {
-	        JWTUtil.validateToken(token, keyType);
+	        JWTUtil.validateToken(token);
 	    } catch (CustomJWTException ex) {
 	        if (ex.getMessage().equals("Expired")) {
 	            return true;

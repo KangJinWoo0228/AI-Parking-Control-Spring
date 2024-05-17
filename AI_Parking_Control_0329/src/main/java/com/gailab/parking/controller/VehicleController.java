@@ -35,4 +35,9 @@ public class VehicleController {
 	public List<Vehicle> getHouseholdVehicles(@PathVariable("addressId") String addressId) {
 		return vehicleService.getHouseholdVehicles(addressId);
 	}
+	
+	@PostMapping("/api/vehicle/regist")
+	public int registVehicle(@RequestBody Vehicle vehicle) {
+		return vehicleService.registVehicle(vehicle);
+	}
 }

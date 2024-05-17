@@ -50,9 +50,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             String accessToken = authHeaderStr.substring(7);
             Map<String, Object> claims;
             if (request.getRequestURI().startsWith("/api/manager")) {
-                claims = JWTUtil.validateToken(accessToken, MANAGER_KEY);
+                claims = JWTUtil.validateToken(accessToken);
             } else {
-                claims = JWTUtil.validateToken(accessToken, USER_KEY);
+                claims = JWTUtil.validateToken(accessToken);
             }
             log.info("JWT claims: " + claims);
             filterChain.doFilter(request, response);

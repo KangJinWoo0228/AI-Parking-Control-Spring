@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.gailab.parking.dao.ManagerRepository">
+	<resultMap type="com.gailab.parking.vo.Manager" id="managerMap">
+		<id property="id" column="manager_id" />
+		<result property="loginId" column="manager_login_id" />
+		<result property="loginPassword" column="manager_login_password" />
+		<result property="email" column="manager_email" />
+		<result property="aptId" column="apt_id" />
+		<result property="name" column="manager_name" />
+		<result property="contact" column="manager_contact" />
+		<result property="createTime" column="manager_createtime" />
+	</resultMap>
+	
+	<select id="getUser" resultMap="managerMap">
+		SELECT * FROM tbl_manager WHERE
+		manager_login_id=#{username}
+	</select>
+</mapper>

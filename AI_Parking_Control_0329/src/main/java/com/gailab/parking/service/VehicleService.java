@@ -29,4 +29,7 @@ public class VehicleService {
 		return vehicleRepository.getHouseholdVehicles(addressId);
 	}
 	
+	public int registVehicle(Vehicle vehicle) {
+		return vehicleRepository.registVehicle(vehicle);
+	}
 }

@@ -16,4 +16,6 @@ public interface VehicleRepository {
 	public List<Vehicle> getAllVehicles(Long aptId);
 	
 	public List<Vehicle> getHouseholdVehicles(String addressId);
+	
+	int registVehicle(Vehicle vehicle);
 }

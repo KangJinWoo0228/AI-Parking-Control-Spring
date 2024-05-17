@@ -6,5 +6,5 @@ import com.gailab.parking.dto.ManagerDTO;
 
 @Mapper
 public interface ManagerRepository {
-    ManagerDTO findByUsername(String username);
+	ManagerDTO getUser(String username);
 }

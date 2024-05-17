@@ -71,4 +71,22 @@
 		WHERE apt_address_id=#{addressId} AND vehicle_type != '방문 차량';
 	</select>
 	
+    <insert id="registVehicle" parameterType="com.gailab.parking.vo.Vehicle">
+	    INSERT INTO tbl_vehicle (
+	      vehicle_number,
+	      vehicle_type,
+	      apt_address_id,
+	      vehicle_owner_name,
+	      vehicle_owner_contact
+	    ) VALUES (
+	      #{vehicleNumber},
+	      #{vehicleType},
+	       (SELECT apt_address_id
+			FROM tbl_apt_address
+			WHERE apt_address_dong=#{addressDong} AND apt_address_ho=#{addressHo}),
+	      #{ownerName},
+	      #{ownerContact}
+	    )
+    </insert>
+	
 </mapper>

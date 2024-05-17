@@ -29,8 +29,8 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler {
 		NormalUserDTO normalUserDTO = (NormalUserDTO) authentication.getPrincipal();
 		Map<String, Object> claims = normalUserDTO.getClaims();
 		
-		String accessUserToken = JWTUtil.generateUserToken(claims, 10);
-		String refreshUserToken = JWTUtil.generateUserToken(claims, 60 * 24);
+		String accessUserToken = JWTUtil.generateToken(claims, 10);
+		String refreshUserToken = JWTUtil.generateToken(claims, 60 * 24);
 		
 		claims.put("accessUserToken", accessUserToken);
 		claims.put("refreshUserToken", refreshUserToken);

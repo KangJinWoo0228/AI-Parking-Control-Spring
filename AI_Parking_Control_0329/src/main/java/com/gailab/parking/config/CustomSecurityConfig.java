@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +18,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.gailab.parking.config.filter.JWTCheckFilter;
 import com.gailab.parking.config.handler.APILoginFailHandler;
 import com.gailab.parking.config.handler.APILoginSuccessHandler;
+import com.gailab.parking.config.handler.APIManagerLoginFailHandler;
+import com.gailab.parking.config.handler.APIManagerLoginSuccessHandler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +27,7 @@ import lombok.extern.log4j.Log4j2;
 @Configuration
 @Log4j2
 @RequiredArgsConstructor
+@Import(ManagerSecurityConfig.class)
 public class CustomSecurityConfig {
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -38,9 +42,9 @@ public class CustomSecurityConfig {
         http.csrf(config -> config.disable());
         
         http.formLogin(config -> {
-        	config.loginPage("/api/normal_user/login");
-        	config.successHandler(new APILoginSuccessHandler());
-        	config.failureHandler(new APILoginFailHandler());
+        	config.loginPage("/api/manager/login");
+        	config.successHandler(new APIManagerLoginSuccessHandler());
+        	config.failureHandler(new APIManagerLoginFailHandler());
         });
         
         http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
