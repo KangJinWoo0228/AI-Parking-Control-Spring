@@ -26,4 +26,8 @@ public class ParkingRuleVacation {
 	private Integer parkingRuleId;
 	
 	private Date parkingRuleDate;
+	
+	private String parkingRuleDescription;
+	
+	private Integer parkingRuleEveryYear;
 }

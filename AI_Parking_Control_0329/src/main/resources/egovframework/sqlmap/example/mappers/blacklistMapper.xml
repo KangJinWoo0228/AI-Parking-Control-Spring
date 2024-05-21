@@ -42,4 +42,26 @@
 		HAVING blacklist_count > 0
 		ORDER BY b.blacklist_reporttime DESC;
     </select>
+    
+    <select id="getAllBlacklist_test" resultMap="blacklistMap">
+		SELECT 
+		    b.vehicle_id, 
+		    b.user_id, 
+		    b.blacklist_reporttime, 
+		    b.blacklist_description, 
+		    v.vehicle_number,
+		    ad.apt_address_dong, 
+		    ad.apt_address_ho, 
+		    b.blacklist_description, 
+		    v.vehicle_owner_name, 
+		    v.vehicle_owner_Contact,
+		    i.inout_picture
+		FROM tbl_blacklist b
+		LEFT JOIN tbl_vehicle v ON b.vehicle_id = v.vehicle_id
+		LEFT JOIN tbl_apt_address ad ON v.apt_address_id = ad.apt_address_id
+		LEFT JOIN tbl_inout i ON v.vehicle_id = i.vehicle_id
+		WHERE ad.apt_id = 2
+		ORDER BY b.blacklist_reporttime DESC;
+    </select>
+    
 </mapper>

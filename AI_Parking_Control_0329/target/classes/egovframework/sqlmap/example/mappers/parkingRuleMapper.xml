@@ -16,6 +16,8 @@
 		<id property="parkingRuleVacationId" column="parking_rule_vacation_id" />
 		<result property="parkingRuleId" column="parking_rule_id"/>
 		<result property="parkingRuleDate" column="parking_rule_date"/>
+		<result property="parkingRuleDescription" column="parking_rule_description"/>
+		<result property="parkingRuleEveryYear" column="parking_rule_everyyear"/>
 	</resultMap>
 	
 	<select id="getParkingRule" resultMap="parkingRuleMap">

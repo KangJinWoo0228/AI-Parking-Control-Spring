@@ -1,6 +1,6 @@
 package com.gailab.parking.controller;
 
-import java.util.List;
+import java.util.List;import javax.ws.rs.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +38,17 @@ public class ParkingRuleController {
 		return ResponseEntity.ok("Parking rule updated successfully");
 		} else {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Parking rule not found");
-}
-}
+		}
+    }
+    
+//    @PutMapping("/api/parking/rule/update/vacation/{aptId}")
+//    public ResponseEntity<String> updateParkingRuleVacation(@PathVariable("aptId") Integer aptId, @RequestBody ParkingRuleVacation updatedVacation) {
+//    	boolean updated = parkingRuleService.updateParkingRuleVacation(aptId, updatedVacation);
+//    }
+//    
+//    @PutMapping("/api/parking/rule/remove/vacation/{aptId}")
+//    public ResponseEntity<String> removeParkingRuleVacation(@PathVariable("aptId") Integer aptId, @RequestBody ParkingRuleVacation removedVacation) {
+//    	boolean updated = parkingRuleService.removeParkingRuleVacation(aptId, removedVacation);
+//    }
+    
 }

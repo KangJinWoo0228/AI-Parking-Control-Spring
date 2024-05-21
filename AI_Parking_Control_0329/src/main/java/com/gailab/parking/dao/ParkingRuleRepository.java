@@ -19,4 +19,5 @@ public interface ParkingRuleRepository {
 	void addVacation(Map<String, Object> request);
 	
     int updateParkingRule(@Param("parkingRuleId") Integer parkingRuleId, @Param("parkingRule") ParkingRule parkingRule);
+    
 }

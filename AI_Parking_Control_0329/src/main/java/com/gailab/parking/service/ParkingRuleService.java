@@ -29,5 +29,10 @@ public class ParkingRuleService {
         int existingRules = parkingRuleRepository.updateParkingRule(parkingRuleId, parkingRule);
         return existingRules == 1;
     }
+//    
+//    public boolean updateParkingRuleVacation(Integer aptId, ParkingRuleVacation updatedVacation) {
+//    	int existingVacation = parkingRuleRepository.updateParkingRuleVacation(aptId, updatedVacation);
+//    	return existingVacation == 1;
+//    }
 	
 }	
