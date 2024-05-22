@@ -31,10 +31,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         log.info("check uri......" + path);
 
-//        if (path.startsWith("/api/manager") || path.startsWith("/api/normal_user")) {
-//            return true;
-//        }
-        if (path.startsWith("/api")) {
+        if (path.startsWith("/api") || (path.startsWith("/manager"))) {
         	return true;
         }
 
@@ -46,10 +43,14 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         log.info("---------");
         String authHeaderStr = request.getHeader("Authorization");
+        if (authHeaderStr == null || !authHeaderStr.startsWith("Bearer")) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Authorization header");
+            return;
+        }
         try {
             String accessToken = authHeaderStr.substring(7);
             Map<String, Object> claims;
-            if (request.getRequestURI().startsWith("/api/manager")) {
+            if (request.getRequestURI().startsWith("/api")) {
                 claims = JWTUtil.validateToken(accessToken);
             } else {
                 claims = JWTUtil.validateToken(accessToken);
@@ -64,11 +65,12 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             String msg = gson.toJson(Map.of("error", "ERROR_ACCESS_TOKEN"));
 
             response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             PrintWriter printWriter = response.getWriter();
             printWriter.println(msg);
             printWriter.close();
         }
-
     }
+
 }
 

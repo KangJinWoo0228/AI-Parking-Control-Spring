@@ -20,7 +20,7 @@ public class SpecificRateController {
 		return specificRateService.getSpecificRate(addressId);
 	}
 	
-	@GetMapping("/api/specific_rate/all/{aptId}")
+	@GetMapping("/api/manager/specific_rate/all/{aptId}")
 	public List<SpecificRate> getAllSpecificRate(@PathVariable("aptId") Integer aptId) {
 		return specificRateService.getAllSpecificRate(aptId);
 	}

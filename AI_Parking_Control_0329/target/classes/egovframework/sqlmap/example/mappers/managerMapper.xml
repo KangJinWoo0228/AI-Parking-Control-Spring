@@ -15,6 +15,6 @@
 	
 	<select id="getUser" resultMap="managerMap">
 		SELECT * FROM tbl_manager WHERE
-		manager_login_id=#{username}
+		manager_login_id=#{loginId}
 	</select>
 </mapper>

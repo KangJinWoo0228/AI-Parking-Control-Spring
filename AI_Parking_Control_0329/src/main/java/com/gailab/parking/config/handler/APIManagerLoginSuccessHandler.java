@@ -22,8 +22,10 @@ public class APIManagerLoginSuccessHandler implements AuthenticationSuccessHandl
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        log.info("Manager login success....");
-        // Manager 계정 로그인 성공 시 JWT 토큰 생성 및 반환
+		log.info("----------");
+		log.info(authentication);
+		log.info("----------");
+
         ManagerDTO managerDTO = (ManagerDTO) authentication.getPrincipal();
         Map<String, Object> claims = managerDTO.getClaims();
 

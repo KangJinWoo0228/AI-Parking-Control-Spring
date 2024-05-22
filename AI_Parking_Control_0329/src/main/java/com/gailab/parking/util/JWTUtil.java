@@ -14,7 +14,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
 
 public class JWTUtil {
-	private static String key = "qciblourcnh32ob2ln7v180apdtavm1xsakm0lzu";
+	private static String key = "qciblourcnh32ob2ln7v180apdtavm1xsakm0lzh";
 	
 	public static String generateToken(Map<String, Object> valueMap, int min) {
 		SecretKey key = null;

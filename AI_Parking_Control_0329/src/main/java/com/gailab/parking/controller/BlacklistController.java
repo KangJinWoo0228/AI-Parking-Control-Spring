@@ -25,7 +25,7 @@ public class BlacklistController {
 		return ResponseEntity.ok("Successfully inserted My Address Vehicle");
 	}
 	
-	@GetMapping("/api/blacklist/{aptId}")
+	@GetMapping("/api/manager/blacklist/{aptId}")
 	public List<Blacklist> getAllBlacklist(@PathVariable("aptId") String aptId) {
 		return blacklistService.getAllBlacklist(aptId);
 	}
